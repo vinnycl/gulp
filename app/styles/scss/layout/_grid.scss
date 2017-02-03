@@ -1,0 +1,72 @@
+$grid-name: grid;  //Nome
+$col-count: 12; // Numero de colunas
+$baseFontSize: 16;
+$grid-width: 940; // tamanho total do gird
+$col-margin: 0; // margem
+$grid-type: fluid; // fixed width (px), fluid(%), or elastic(em).
+
+
+$col-width-pixels: ($grid-width - ($col-margin * ($col-count - 1))) / $col-count;
+$col-width-percentage: (($grid-width - ($col-margin * ($col-count - 1))) / $col-count) / $grid-width * 100%;
+$col-margin-percentage: $col-margin / $grid-width * 100%;
+$col-width-relative: $col-width-pixels / $baseFontSize;
+$col-margin-relative: $col-margin / $baseFontSize;
+
+.wrapper {
+  @if ($grid-type == "fixed"){
+    width: $grid-width + px;
+  }
+  @if ($grid-type == "fluid"){
+    width: 100%;
+    max-width: $grid-width + px;
+  }
+  @if ($grid-type == "elastic"){
+    font-size: $baseFontSize;
+  }
+  margin: 0 auto;
+  display: block;
+}
+
+
+.#{$grid-name}-col {
+  position: relative;
+  float: left;
+}
+
+.#{$grid-name}-col-1{
+  @if ($grid-type == 'fluid') {
+    width: $col-width-percentage;
+  }
+  @elseif ($grid-type == 'fixed'){
+    width: $col-width-pixels + px;
+  }
+  @elseif ($grid-type == 'elastic'){
+    width: $col-width-relative + em;
+  }
+}
+
+@for $i from 2 through ($col-count - 1){
+  .#{$grid-name}-col-#{$i}{
+    @if ($grid-type == 'fluid') {
+      width: $col-width-percentage * $i + $col-margin-percentage * ($i - 1);
+    }
+    @elseif ($grid-type == 'fixed'){
+      width: ($col-width-pixels * $i) + ($col-margin * ($i - 1)) + px;
+    }
+    @elseif ($grid-type == 'elastic'){
+      width: $col-width-relative * $i + ($col-margin-relative * ($i - 1)) + em;
+    }
+  }
+}
+
+.#{$grid-name}-col-#{$col-count}{
+  @if ($grid-type == 'fluid') {
+    width: 100%;
+  } 
+  @elseif ($grid-type == 'fixed'){
+    width: $grid-width + px
+  }
+  @elseif ($grid-type == 'elastic'){
+    width: $grid-width / $baseFontSize + em;
+  }
+}
